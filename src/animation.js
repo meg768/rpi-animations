@@ -2,7 +2,6 @@ var Events  = require('events');
 
 
 function debug() {
-    //console.log.apply(this, arguments);
 }
 
 
@@ -20,11 +19,14 @@ module.exports = class Animation extends Events {
         this.renderFrequency = 0;
         this.renderTime      = 0;
 
-        if (options.debug) {
-            debug = function() {
-                console.log.apply(this, arguments);
-            }
+
+        if (typeof options.debug === 'function') {
+            debug = options.debug;
         }
+        else if (options.debug) {
+            debug = console.log;
+        }
+
 
     }
 
