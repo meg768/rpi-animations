@@ -1,3 +1,3 @@
 
 module.exports.Animation = require('./src/animation.js');
-module.exports.AnimationQueue = require('./src/animation-queue.js');
+module.exports.Queue = require('./src/queue.js');
