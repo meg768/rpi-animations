@@ -109,7 +109,7 @@ module.exports = class Animation extends Events {
     run(options) {
 
         if (options) {
-            var {priority = 'normal', duration = undefined} = options;
+            var {priority = this.priority, duration = this.duration} = options;
 
             this.priority  = priority;
             this.duration  = duration;
