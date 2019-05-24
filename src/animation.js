@@ -106,7 +106,15 @@ module.exports = class Animation extends Events {
         this.cancelled = true;
     }
 
-    run() {
+    run(options) {
+
+        if (options) {
+            var {priority = 'normal', duration = undefined} = options;
+
+            this.priority  = priority;
+            this.duration  = duration;
+    
+        }
 
         return new Promise((resolve, reject) => {
 
