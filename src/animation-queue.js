@@ -51,6 +51,10 @@ module.exports = class AnimationQueue extends Events {
 			});
 		}
 
+		run() {
+			return dequeue();
+		}
+
 
 		enqueue(animation) {
 
