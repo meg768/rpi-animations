@@ -7,7 +7,7 @@ function debug() {
 
 module.exports = class Animation extends Events {
 
-    constructor(options) {
+    constructor(options = {}) {
         super();
 
         var {name = 'Noname', priority = 'normal', duration = undefined} = options;
