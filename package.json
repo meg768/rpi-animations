@@ -1,0 +1,23 @@
+{
+  "name": "rpi-animations",
+  "version": "1.0.0",
+  "description": "rpi-animations",
+  "main": "index.js",
+  "scripts": {
+    "goto-github": "open https://github.com/meg768/rpi-animations",
+    "goto-npm": "open https://www.npmjs.com/package/rpi-rpi-animations",
+    "git-pull": "git pull",
+    "git-commit": "git add -A && git commit -m '-' && git push",
+    "git-revert": "git reset --hard HEAD"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meg768/rpi-animations.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/meg768/rpi-animations/issues"
+  },
+  "homepage": "https://github.com/meg768/rpi-animations#readme"
+}
