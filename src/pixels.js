@@ -47,9 +47,17 @@ module.exports = class Pixels {
         }
 
         clear() {
-            self.fill(0);
+            this.fill(0);
         }
 
+		setPixel(x, y, color) {
+            this.pixels[y * this.width + x] = color;
+        }
+
+        getPixel(x, y) {
+            return this.pixels[y * this.width + x];
+		}
+		
         setPixelColor(x, y, color) {
             this.pixels[y * this.width + x] = color;
         }
