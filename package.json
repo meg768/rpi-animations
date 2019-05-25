@@ -1,6 +1,6 @@
 {
   "name": "rpi-animations",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "rpi-animations",
   "main": "index.js",
   "scripts": {
@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/meg768/rpi-animations/issues"
   },
-  "homepage": "https://github.com/meg768/rpi-animations#readme"
+  "homepage": "https://github.com/meg768/rpi-animations#readme",
+  "dependencies": {
+    "color": "^3.1.1"
+  }
 }
