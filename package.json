@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "goto-github": "open https://github.com/meg768/rpi-animations",
-    "goto-npm": "open https://www.npmjs.com/package/rpi-rpi-animations",
+    "goto-npm": "open https://www.npmjs.com/package/rpi-animations",
     "git-pull": "git pull",
     "git-commit": "git add -A && git commit -m '-' && git push",
     "git-revert": "git reset --hard HEAD",

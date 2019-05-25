@@ -72,6 +72,10 @@ module.exports = class Pixels {
  
         setPixelHSL(x, y, h, s, l) {
             this.pixels[y * this.width + x] = this.HSL(h, s, l);
-        }
+		}
+		
+		render(options) {
+
+		}
  
 }
