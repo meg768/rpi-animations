@@ -10,13 +10,13 @@ module.exports = class Animation extends Events {
     constructor(options = {}) {
         super();
 
-        var {name = 'Noname', priority = 'normal', duration = undefined} = options;
+        var {renderFrequency = 0, name = 'Noname', priority = 'normal', duration = undefined} = options;
 
         this.name            = name;
         this.priority        = priority;
         this.cancelled       = false;
         this.duration        = duration;
-        this.renderFrequency = 0;
+        this.renderFrequency = renderFrequency;
         this.renderTime      = 0;
 
 
