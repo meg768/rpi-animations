@@ -1,16 +1,11 @@
-var Events  = require('events');
-
-
-function debug() {
-}
-
+var Events = require('events');
 
 module.exports = class Animation extends Events {
 
     constructor(options = {}) {
         super();
 
-        var {renderFrequency = 0, name = 'Noname', priority = 'normal', iterations = undefined, duration = undefined} = options;
+        var {debug, renderFrequency, name = 'Noname', priority = 'normal', iterations = undefined, duration = undefined} = options;
 
         this.name            = name;
         this.priority        = priority;
@@ -19,22 +14,21 @@ module.exports = class Animation extends Events {
         this.iterations      = iterations;
         this.renderFrequency = renderFrequency;
         this.renderTime      = 0;
+        this.debug           = () => {};
 
-        if (typeof options.debug === 'function') {
-            debug = options.debug;
+        if (typeof debug === 'function') {
+            this.debug = debug;
         }
-        else if (options.debug) {
-            debug = console.log;
+        else if (debug) {
+            this.debug = console.log;
         }
-
-
     }
 
     render() {
     }
 
     start() {
-        debug('Starting animation', this.name);
+        this.debug('Starting animation', this.name);
 
         return new Promise((resolve, reject) => {
 
@@ -42,7 +36,7 @@ module.exports = class Animation extends Events {
             this.renderTime = 0;
             this.iteration  = 0;
 
-            debug('Animation', this.name, 'started.');
+            this.debug('Animation', this.name, 'started.');
             resolve();
 
             this.emit('started');
@@ -52,11 +46,11 @@ module.exports = class Animation extends Events {
     }
 
     stop() {
-        debug('Stopping animation', this.name);
+        this.debug('Stopping animation', this.name);
 
         return new Promise((resolve, reject) => {
 
-            debug('Animation', this.name, 'stopped.');
+            this.debug('Animation', this.name, 'stopped.');
             resolve();
 
             this.emit('stopped');
@@ -66,13 +60,18 @@ module.exports = class Animation extends Events {
 
     loop() {
 
-        debug('Running loop', this.name);
+        this.debug('Running loop', this.name);
 
         return new Promise((resolve, reject) => {
 
-            var start = new Date();
+            var render = () => {
+                this.debug('Rendering...');
+                this.render();
+                this.renderTime = new Date();
+            };
 
             var loop = () => {
+                var start = new Date();
 
                 var now = new Date();
 
@@ -88,10 +87,8 @@ module.exports = class Animation extends Events {
                 else {
                     var now = new Date();
 
-                    if (this.renderFrequency == 0 || now - this.renderTime >= this.renderFrequency) {
-
-                        this.render();
-                        this.renderTime = now;
+                    if (this.iterations || this.renderFrequency == undefined || this.renderFrequency == 0 || now - this.renderTime >= this.renderFrequency) {
+                        render();
                     }
 
                     this.iteration++;
@@ -107,7 +104,7 @@ module.exports = class Animation extends Events {
 
 
     cancel() {
-        debug('Cancelling animation', this.name);
+        this.debug('Cancelling animation', this.name);
         this.cancelled = true;
     }
 
@@ -130,7 +127,7 @@ module.exports = class Animation extends Events {
                 return this.stop();
             })
             .catch((error) => {
-                console.log(error);
+                this.debug(error);
             })
             .then(() => {
                 resolve();

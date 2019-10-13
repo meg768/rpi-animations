@@ -1,25 +1,22 @@
 var Events = require('events');
 
-
-
-function debug() {
-}
-
-
 module.exports = class AnimationQueue extends Events {
 
         constructor(options = {}) {
+            var {debug} = options;
+
             super();
 
             this.currentAnimation = undefined;
             this.animationQueue   = [];
             this.busy             = false;
+            this.debug            = () => {};
 
-			if (typeof options.debug === 'function') {
-				debug = options.debug;
+			if (typeof debug === 'function') {
+				this.debug = debug;
 			}
-			else if (options.debug) {
-				debug = console.log;
+			else if (debug) {
+				this.debug = console.log;
 			}
 	
         }
@@ -58,6 +55,8 @@ module.exports = class AnimationQueue extends Events {
 
 		enqueue(animation) {
 
+            this.debug(`Enqueuing ${animation.name}...`);
+
 			var priority = animation.priority;
 
 			if (priority == 'low' && this.busy)
@@ -93,7 +92,7 @@ module.exports = class AnimationQueue extends Events {
 					this.busy = false;
 
                     this.emit('idle');
-					debug('Entering idle mode...');
+					this.debug('Entering idle mode...');
 
 				})
 
