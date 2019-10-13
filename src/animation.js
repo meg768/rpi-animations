@@ -10,15 +10,15 @@ module.exports = class Animation extends Events {
     constructor(options = {}) {
         super();
 
-        var {renderFrequency = 0, name = 'Noname', priority = 'normal', duration = undefined} = options;
+        var {renderFrequency = 0, name = 'Noname', priority = 'normal', iterations = undefined, duration = undefined} = options;
 
         this.name            = name;
         this.priority        = priority;
         this.cancelled       = false;
         this.duration        = duration;
+        this.iterations      = iterations;
         this.renderFrequency = renderFrequency;
         this.renderTime      = 0;
-
 
         if (typeof options.debug === 'function') {
             debug = options.debug;
@@ -40,6 +40,7 @@ module.exports = class Animation extends Events {
 
             this.cancelled  = false;
             this.renderTime = 0;
+            this.iteration  = 0;
 
             debug('Animation', this.name, 'started.');
             resolve();
@@ -64,22 +65,24 @@ module.exports = class Animation extends Events {
 
 
     loop() {
-        var self = this;
 
-        debug('Running loop', self.name);
+        debug('Running loop', this.name);
 
         return new Promise((resolve, reject) => {
 
             var start = new Date();
 
-            function loop() {
+            var loop = () => {
 
                 var now = new Date();
 
-                if (self.cancelled) {
+                if (this.cancelled) {
                     resolve();
                 }
-                else if (self.duration != undefined && (self.duration >= 0 && now - start > self.duration)) {
+                else if (this.duration != undefined && (this.duration >= 0 && now - start > this.duration)) {
+                    resolve();
+                }
+                else if (this.iterations != undefined && (this.iteration >= this.iterations)) {
                     resolve();
                 }
                 else {
@@ -91,6 +94,8 @@ module.exports = class Animation extends Events {
                         self.renderTime = now;
                     }
 
+                    this.iteration++;
+                    
                     setImmediate(loop);
                 }
             }
