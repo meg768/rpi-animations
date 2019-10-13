@@ -88,14 +88,14 @@ module.exports = class Animation extends Events {
                 else {
                     var now = new Date();
 
-                    if (self.renderFrequency == 0 || now - self.renderTime >= self.renderFrequency) {
+                    if (this.renderFrequency == 0 || now - this.renderTime >= this.renderFrequency) {
 
-                        self.render();
-                        self.renderTime = now;
+                        this.render();
+                        this.renderTime = now;
                     }
 
                     this.iteration++;
-                    
+
                     setImmediate(loop);
                 }
             }
