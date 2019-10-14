@@ -22,6 +22,7 @@ module.exports = class Animation extends Events {
         else if (debug) {
             this.debug = console.log;
         }
+
     }
 
     render() {
@@ -40,7 +41,6 @@ module.exports = class Animation extends Events {
             resolve();
 
             this.emit('started');
-
         });
 
     }
@@ -49,18 +49,17 @@ module.exports = class Animation extends Events {
         this.debug('Stopping animation', this.name);
 
         return new Promise((resolve, reject) => {
-
             this.debug('Animation', this.name, 'stopped.');
-            resolve();
 
+            resolve();
             this.emit('stopped');
         });
     }
 
 
     loop() {
-
         this.debug('Running loop', this.name);
+        var start = new Date();
 
         return new Promise((resolve, reject) => {
 
@@ -71,11 +70,12 @@ module.exports = class Animation extends Events {
             };
 
             var loop = () => {
-                var start = new Date();
-
                 var now = new Date();
 
                 if (this.cancelled) {
+                    this.emit('cancelled');
+                    this.emit('canceled');
+            
                     resolve();
                 }
                 else if (this.duration != undefined && (this.duration >= 0 && now - start > this.duration)) {
@@ -101,11 +101,11 @@ module.exports = class Animation extends Events {
         });
     }
 
-
-
     cancel() {
         this.debug('Cancelling animation', this.name);
         this.cancelled = true;
+        this.emit('cancelling');
+        this.emit('canceling');
     }
 
     run(options) {
