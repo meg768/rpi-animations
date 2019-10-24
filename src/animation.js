@@ -1,6 +1,7 @@
+var Sleep = require('sleep');
 var Events = require('events');
 
-module.exports = class Animation extends Events {
+module.exports = class extends Events {
 
     constructor(options = {}) {
         super();
@@ -13,19 +14,16 @@ module.exports = class Animation extends Events {
         this.duration        = duration;
         this.iterations      = iterations;
         this.renderFrequency = renderFrequency;
-        this.renderTime      = 0;
-        this.debug           = () => {};
-
-        if (typeof debug === 'function') {
-            this.debug = debug;
-        }
-        else if (debug) {
-            this.debug = console.log;
-        }
-
+        this.renderTime      = undefined;
+        this.debug           = typeof debug === 'function' ? debug : (debug ? console.log : () => {});
     }
 
     render() {
+        this.debug('Animation.render() should not be called!');
+    }
+
+    sleep(ms) {
+        Sleep.msleep(ms);
     }
 
     start() {
@@ -34,7 +32,7 @@ module.exports = class Animation extends Events {
         return new Promise((resolve, reject) => {
 
             this.cancelled  = false;
-            this.renderTime = 0;
+            this.renderTime = undefined;
             this.iteration  = 0;
 
             this.debug('Animation', this.name, 'started.');
@@ -58,15 +56,20 @@ module.exports = class Animation extends Events {
 
 
     loop() {
-        this.debug('Running loop', this.name);
+        this.debug(`Running loop ${this.name}...`);
         var start = new Date();
 
         return new Promise((resolve, reject) => {
 
             var render = () => {
-                this.debug('Rendering...');
-                this.render();
-                this.renderTime = new Date();
+                var now = new Date();
+
+                if (this.renderFrequency == undefined || this.renderFrequency == 0 || this.renderTime == undefined || now - this.renderTime >= this.renderFrequency) {
+                    this.debug(`Rendering ${this.name}...`);
+                    this.render();
+                    this.renderTime = now;
+                }
+
             };
 
             var loop = () => {
@@ -85,13 +88,10 @@ module.exports = class Animation extends Events {
                     resolve();
                 }
                 else {
-                    var now = new Date();
+                    render();
 
-                    if (this.iterations || this.renderFrequency == undefined || this.renderFrequency == 0 || now - this.renderTime >= this.renderFrequency) {
-                        render();
-                    }
-
-                    this.iteration++;
+                    if (this.iterations != undefined)
+                        this.iteration++;
 
                     setImmediate(loop);
                 }
