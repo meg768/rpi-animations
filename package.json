@@ -1,6 +1,6 @@
 {
   "name": "rpi-animations",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "rpi-animations",
   "main": "index.js",
   "scripts": {
