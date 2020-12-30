@@ -3,20 +3,27 @@ var Events = require('events');
 
 module.exports = class extends Events {
 
-    constructor(options = {}) {
-        super();
 
-        var {debug, renderFrequency = undefined, name = 'Noname', priority = 'normal', iterations = undefined, duration = undefined} = options;
+	constructor(options = {}) {
 
-        this.name            = name;
-        this.priority        = priority;
-        this.cancelled       = false;
-        this.duration        = duration;
-        this.iterations      = iterations;
-        this.renderFrequency = renderFrequency;
-        this.renderTime      = undefined;
-        this.debug           = typeof debug === 'function' ? debug : (debug ? console.log : () => {});
-    }
+		var toValidNumber = (number) => {
+			number = Number.isNaN(Number(number)) ? -1 : Number(number);
+			return number > 0 ? number : undefined;
+		};
+
+		super();
+	
+		var {debug, renderFrequency = undefined, name = 'Noname', priority = 'normal', iterations = undefined, duration = undefined} = options;
+	
+		this.name            = name;
+		this.priority        = priority;
+		this.cancelled       = false;
+		this.duration        = toValidNumber(duration);
+		this.iterations      = toValidNumber(iterations);
+		this.renderFrequency = toValidNumber(renderFrequency);
+		this.renderTime      = undefined;
+		this.debug           = typeof debug === 'function' ? debug : (debug ? console.log : () => {});
+	}
 
     render() {
         this.debug('Animation.render() should not be called!');
@@ -67,7 +74,7 @@ module.exports = class extends Events {
             var render = () => {
                 var now = new Date();
 
-                if (this.renderFrequency == undefined || this.renderFrequency == 0 || this.renderTime == undefined || now - this.renderTime >= this.renderFrequency) {
+                if (this.renderFrequency == undefined || this.renderTime == undefined || now - this.renderTime >= this.renderFrequency) {
                     this.debug(`Rendering ${this.name}...`);
                     this.render();
                     this.renderTime = now;
@@ -84,10 +91,10 @@ module.exports = class extends Events {
             
                     resolve();
                 }
-                else if (this.duration != undefined && (this.duration >= 0 && now - start > this.duration)) {
+                else if (this.duration != undefined && now - start > this.duration) {
                     resolve();
                 }
-                else if (this.iterations != undefined && (this.iteration >= this.iterations)) {
+                else if (this.iterations != undefined && this.iteration >= this.iterations) {
                     resolve();
                 }
                 else {
