@@ -6,11 +6,6 @@ module.exports = class extends Events {
 
 	constructor(options = {}) {
 
-		var toValidNumber = (number) => {
-			number = Number.isNaN(Number(number)) ? -1 : Number(number);
-			return number > 0 ? number : undefined;
-		};
-
 		super();
 	
 		var {debug, renderFrequency = undefined, name = 'Noname', priority = 'normal', iterations = undefined, duration = undefined} = options;
@@ -18,9 +13,9 @@ module.exports = class extends Events {
 		this.name            = name;
 		this.priority        = priority;
 		this.cancelled       = false;
-		this.duration        = toValidNumber(duration);
-		this.iterations      = toValidNumber(iterations);
-		this.renderFrequency = toValidNumber(renderFrequency);
+		this.duration        = duration;
+		this.iterations      = iterations;
+		this.renderFrequency = renderFrequency;
 		this.renderTime      = undefined;
 		this.debug           = typeof debug === 'function' ? debug : (debug ? console.log : () => {});
 	}
@@ -91,7 +86,7 @@ module.exports = class extends Events {
             
                     resolve();
                 }
-                else if (this.duration != undefined && now - start > this.duration) {
+                else if (this.duration != undefined && this.duration > 0 && now - start > this.duration) {
                     resolve();
                 }
                 else if (this.iterations != undefined && this.iteration >= this.iterations) {

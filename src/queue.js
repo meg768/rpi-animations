@@ -18,7 +18,7 @@ module.exports = class AnimationQueue extends Events {
 			else if (debug) {
 				this.debug = console.log;
 			}
-	
+
         }
 
 
